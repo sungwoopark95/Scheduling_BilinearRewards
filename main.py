@@ -4,10 +4,14 @@ from Oracle import *
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 
         
 def save(exp_reward,exp_oracle_reward,queue_length,T): ## save data
+    Path("./result").mkdir(parents=True, exist_ok=True)
+
+    
     cum_reward=np.cumsum(exp_reward.mean(axis=0))
     cum_reward_oracle=(np.array(range(T))+1)*exp_oracle_reward.mean()
     sd_regret=np.std(np.outer((np.array(range(T))+1),exp_oracle_reward).T-exp_reward,axis=0)
