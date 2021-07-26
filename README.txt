@@ -2,7 +2,7 @@ Scheduling Servers with Stochastic Bi-linear Rewards
 
 
 ## Requirements
-- Python 3
+- Python >=3.5
 
 ##Structure
 -main.py
