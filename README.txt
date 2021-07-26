@@ -9,13 +9,13 @@ Scheduling Servers with Stochastic Bi-linear Rewards
 This file includes the main function.
 
 -Algorithm.py
-This file includes code for running the suggested algorithm.
+The source code for running the suggested algorithm.
 
 -Environment.py
-This file includes code for generating the environment for the queueing system with the bilinear structure. 
+The source code for generating the environment for the queueing system with the bilinear structure. 
 
 -Oracle.py
-This file includes code for running the oracle policy.
+The source code for running the oracle policy.
 
 ##How to run this code
 please run this command:
