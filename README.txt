@@ -6,7 +6,7 @@ Scheduling Servers with Stochastic Bi-linear Rewards
 
 ##Structure
 -main.py
-This file includes the main function.
+The source code for the main function.
 
 -Algorithm.py
 The source code for running the suggested algorithm.
