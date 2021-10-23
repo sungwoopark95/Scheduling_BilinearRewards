@@ -1,4 +1,4 @@
-### Scheduling Servers with Stochastic Bi-linear Rewards
+# Scheduling Servers with Stochastic Bi-linear Rewards
 
 
 ## Requirements
