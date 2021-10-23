@@ -2,22 +2,22 @@
 
 
 ## Requirements
-- Python 3 >=3.5
+ Python 3 >=3.5
 
 ## Structure
-  * main.py
+  * main.py\
   This file includes the main function.
 
-  * Preprocess.py
+  * Preprocess.py\
   This file includes the code for extracting and preprocessing real data.
 
-  * Algorithm.py
+  * Algorithm.py\
   This file includes the code for the scheduling algorithm.
 
-  * Environment.py
+  * Environment.py\
   This file includes the code for generating an environment (synthetic world or real world) for queueing system with bilinear structure. 
 
-  * Oracle.py
+  * Oracle.py\
   This file includes the code for running the oracle policy.
 
 ## How to run this code
