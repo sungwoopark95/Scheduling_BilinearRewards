@@ -21,7 +21,7 @@
   This file includes the code for running the oracle policy.
 
 ## How to run this code
-please run this command:
+Please run this command:
 
  * Synthetic data\
  python3 main.py syn
