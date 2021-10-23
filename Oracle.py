@@ -17,10 +17,10 @@ class Oracle:
         self.J=self.Env.J
         self.x=self.Env.x
         self.y=self.Env.y
-        self.lamb=self.Env.lamb
-        self.mu=self.Env.mu
+        self.rho=self.Env.rho
+        self.n=self.Env.n
 
-    def oracle_solver(self,reward_mean,lamb, mu):
+    def oracle_solver(self,reward_mean,rho, n):
         ## oracle policy for regret
 
         if reward_mean.shape[0] == 0:
@@ -41,7 +41,7 @@ class Oracle:
         def obj_dynamic(x):
             f = 0.0
             for i in range(num_job):
-                temp_sum = lamb[i]*x[i*num_server: (i+1)*num_server].dot(reward_mean[i, :])
+                temp_sum = rho[i]*x[i*num_server: (i+1)*num_server].dot(reward_mean[i, :])
 
                 f += temp_sum  
 
@@ -50,7 +50,7 @@ class Oracle:
             return -f
         b=np.ones(num_job * num_server)
         for i in range(num_job):
-            b[i*num_server:(i+1)*num_server]=self.lamb[i]
+            b[i*num_server:(i+1)*num_server]=self.rho[i]
             
         def eq_const(x):
             c=np.ones(num_job)
@@ -58,7 +58,7 @@ class Oracle:
             return c-x.reshape(num_job,num_server)@np.ones(num_server)
         
         def ineq_const(x):
-            return self.mu - A @ (x*b)
+            return self.n - A @ (x*b)
 
         ineq_cons = [{'type': 'ineq',
                      'fun': ineq_const}, {'type': 'eq',
@@ -88,9 +88,9 @@ class Oracle:
         for i in range(self.I):
             for j in range(self.J):
                 C[i,j]=self.Env.mean_reward(i,j)
-        prob=self.oracle_solver(C,self.lamb, self.mu).reshape(self.I,self.J)
+        prob=self.oracle_solver(C,self.rho, self.n).reshape(self.I,self.J)
         for i in range(self.I):
             for j in range(self.J):
-                  self.exp_oracle_reward=self.exp_oracle_reward+self.lamb[i]*prob[i,j]*self.Env.mean_reward(i,j)
+                  self.exp_oracle_reward=self.exp_oracle_reward+self.rho[i]*prob[i,j]*self.Env.mean_reward(i,j)
     
         

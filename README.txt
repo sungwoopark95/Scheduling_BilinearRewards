@@ -2,21 +2,26 @@ Scheduling Servers with Stochastic Bi-linear Rewards
 
 
 ## Requirements
-- Python >=3.5
+- Python 3 >=3.5
 
-##Structure
+## Structure
 -main.py
-The source code for the main function.
+This file includes the main function.
+
+-Preprocess.py
+This file includes the code for extracting and preprocessing real data.
 
 -Algorithm.py
-The source code for running the suggested algorithm.
+This file includes the code for the scheduling algorithm.
 
 -Environment.py
-The source code for generating the environment for the queueing system with the bilinear structure. 
+This file includes the code for generating an environment (synthetic world or real world) for queueing system with bilinear structure. 
 
 -Oracle.py
-The source code for running the oracle policy.
+This file includes the code for running the oracle policy.
 
-##How to run this code
+## How to run this code
 please run this command:
-python3 main.py
+
+Synthetic data: python3 main.py syn
+Real data: python3 main.py real
