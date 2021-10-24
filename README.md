@@ -11,11 +11,11 @@
   * Preprocess.py\
   This file includes the code for extracting and preprocessing real data.
 
-  * Algorithm.py\
-  This file includes the code for the scheduling algorithm.
-
   * Environment.py\
   This file includes the code for generating an environment (synthetic world or real world) for queueing system with bilinear structure. 
+  
+  * Algorithm.py\
+  This file includes the code for the scheduling algorithm.
 
   * Oracle.py\
   This file includes the code for running the oracle policy.
