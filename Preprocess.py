@@ -23,7 +23,7 @@ class Preprocess:
         print('Extraction starts')
         time=5000000000
 
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= #put your own key
+#         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=       #put your own key and activate it
         client = bigquery.Client()
         QUERY = (
              """
