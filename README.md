@@ -12,7 +12,7 @@
   This file includes the code for extracting and preprocessing real data.
 
   * Environment.py\
-  This file includes the code for generating an environment (synthetic world or real world) for queueing system with bilinear structure. 
+  This file includes the code for generating an environment (synthetic world or real world) of a queueing system with the bilinear reward structure. 
   
   * Algorithm.py\
   This file includes the code for the scheduling algorithm.
