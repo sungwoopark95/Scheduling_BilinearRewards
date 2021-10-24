@@ -23,7 +23,7 @@ class Preprocess:
         print('Extraction starts')
         time=5000000000
 
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./rising-timing-327605-5d1392df9030.json"
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= #put your own key
         client = bigquery.Client()
         QUERY = (
              """
