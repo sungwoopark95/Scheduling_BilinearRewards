@@ -9,7 +9,7 @@
   This file includes the main function.
 
   * Preprocess.py\
-  This file includes the code for extracting and preprocessing real data. It is required to put your own google account key in this file to extract public dataset.
+  This file includes the code for extracting and preprocessing real data. It is required to put your own google cloud key in this file to extract public dataset.
 
   * Environment.py\
   This file includes the code for generating an environment (synthetic world or real world) of a queueing system with the bilinear reward structure. 
