@@ -1,4 +1,4 @@
-# Scheduling&Learning_BilinearRewards
+# Scheduling_BilinearRewards
 
 
 ## Requirements
