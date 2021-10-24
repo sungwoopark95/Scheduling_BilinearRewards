@@ -15,7 +15,7 @@
   This file includes the code for generating an environment (synthetic world or real world) of a queueing system with the bilinear reward structure. 
   
   * Algorithm.py\
-  This file includes the code for the scheduling algorithm.
+  This file includes the code for scheduling algorithms.
 
   * Oracle.py\
   This file includes the code for running the oracle policy.
