@@ -1,7 +1,7 @@
 # Scheduling_BilinearRewards
 
 
-## Requirements
+## Requirement
  Python 3 >=3.5
 
 ## Structure
