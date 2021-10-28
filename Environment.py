@@ -74,7 +74,7 @@ class RealWorld:
         machine=pd.read_csv("./data/pre_machine.csv") #load machine (server)
         instance=pd.read_csv("./data/pre_instance.csv") #load instance
         cpi=pd.read_csv("./data/pre_cpi.csv")
-        self.sd=np.load('./cpi_sd.npy')
+        self.sd=np.load('./data/cpi_sd.npy')
         collection=pd.read_csv("./data/pre_collection.csv") #load collection (job)
         self.n=machine.groupby('cluster').size().reset_index(name='count')['count'].values     
         ##compute rho for each collection class
@@ -120,7 +120,7 @@ class RealWorld:
         ## arrival jobs
         t_prev=0
         for t in range(self.T):
-            t_1=t*(10**6)*10
+            t_1=t*(10**6)*5
             df_temp=collection.loc[(collection['time']<t_1) & (collection['time']>=t_prev)]
             arriv_num=df_temp.shape[0]
             clus_list= df_temp['cluster'].values-1

@@ -32,7 +32,7 @@ def plot(repeat):  ## load and plot data
     fig, ax = plt.subplots()
     ax.plot(range(T),regret, color='orange', label='Algorithm 1')
     ax.fill_between(range(T), (regret-1.96*sd/np.sqrt(repeat)), (regret+1.96*sd/np.sqrt(repeat)), color='orange', alpha=.1 )
-    plt.xlabel('T')
+    plt.xlabel('Time step t')
     plt.ylabel('Regret')
     plt.legend(loc='best')
     plt.savefig('./result/regret_plot.png')
@@ -43,7 +43,7 @@ def plot(repeat):  ## load and plot data
     fig, ax = plt.subplots()
     ax.plot(range(T),queue_mean, color='orange', label='Algorithm 1')
     ax.fill_between(range(T), (queue_mean-1.96*queue_sd/np.sqrt(repeat)), (queue_mean+1.96*queue_sd/np.sqrt(repeat)), color='orange', alpha=.1 )
-    plt.xlabel('T')
+    plt.xlabel('Time step t')
     plt.ylabel('Queue Length')
     plt.legend(loc='best')
     plt.savefig('./result/queue_plot.png')
@@ -144,7 +144,7 @@ if __name__ == "__main__":
         I=5
         J=12
         d=4
-        T=500
+        T=1100
         gamma=1.2
         ext=False #True: extract real data
         prep=False #True: preprocess real data

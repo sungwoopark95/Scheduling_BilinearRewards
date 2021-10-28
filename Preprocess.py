@@ -21,9 +21,9 @@ import scipy as sp
 class Preprocess:
     def extraction():
         print('Extraction starts')
-        time=5000000000
+        time=5500000000
 
-#         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=       #put your own key and activate it
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./rising-timing-327605-5d1392df9030.json"
         client = bigquery.Client()
         QUERY = (
              """
@@ -74,8 +74,7 @@ class Preprocess:
 
         machine_num=12
         collection_num=5
-#         time=10000000000
-        seed=0
+        seed=1
         df_machine=pd.read_csv("./data/machine.csv")
         df_instance=pd.read_csv("./data/instance.csv")
         df_cpi=pd.read_csv("./data/cpi.csv")
@@ -146,13 +145,10 @@ class Preprocess:
         df_cpi['1/CPI']=1/df_cpi['CPI']
         df_cpi_stat=df_cpi.groupby(['collection_cluster','machine_cluster'])['1/CPI'].mean().reset_index(name='1/cpi_mean')
         df_cpi_stat['1/cpi_variance']=df_cpi.groupby(['collection_cluster','machine_cluster'])['1/CPI'].var().reset_index(name='1/cpi_variance')['1/cpi_variance']
-        cpi_non=[df_cpi['1/CPI'].mean(),df_cpi['1/CPI'].var()]
-        cpi_sd= np.sqrt(df_cpi['1/CPI'].var())
 
 
         df_instance.to_csv('./data/pre_instance.csv',mode='w')
         df_cpi_stat.to_csv('./data/pre_cpi.csv', mode='w')
         df_machine.to_csv('./data/pre_machine.csv',mode='w')
-        np.save('./cpi_sd',cpi_sd)
         df_collection.to_csv('./data/pre_collection.csv',mode='w')
         print('Preprocess done')
