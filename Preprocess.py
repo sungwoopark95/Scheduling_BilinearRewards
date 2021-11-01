@@ -1,21 +1,9 @@
-from google.cloud import bigquery
 import os
 import numpy as np
-import math
-from numpy.random import seed
-from numpy.random import rand
-import matplotlib.pyplot as plt
-from numpy.random import choice
-from sys import exit
 import pandas as pd
-import random
-import matplotlib as mpl
-import seaborn as sns
-import statsmodels.api as sm # recommended import according to the docs
-import matplotlib.pyplot as plt
+from google.cloud import bigquery
 from sklearn.cluster import KMeans 
 from sklearn.datasets import make_blobs
-import scipy as sp
 
 
 class Preprocess:
