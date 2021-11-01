@@ -23,7 +23,7 @@ class Preprocess:
         print('Extraction starts')
         time=5500000000
 
-#         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./rising-timing-327605-5d1392df9030.json"  #put your own google cloud key
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./rising-timing-327605-5d1392df9030.json"
         client = bigquery.Client()
         QUERY = (
              """
@@ -46,7 +46,7 @@ class Preprocess:
         id_list=tuple(df_collection['collection_id'])
 
         QUERY = """
-        select  collection_id, resource_request.cpus as cpus, resource_request.memory as memory
+        select  time,collection_id, resource_request.cpus as cpus, resource_request.memory as memory
         from `google.com:google-cluster-data`.clusterdata_2019_a.instance_events
         where (time between 1 and {}) and collection_id in {}
         """.format(time,id_list)

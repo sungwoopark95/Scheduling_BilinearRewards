@@ -37,6 +37,7 @@ def plot(repeat):  ## load and plot data
     plt.legend(loc='best')
     plt.savefig('./result/regret_plot.png')
     plt.show()
+    plt.clf()
     
     queue_mean=np.loadtxt('./result/queue_mean.csv', delimiter=',')
     queue_sd=np.loadtxt('./result/queue_sd.csv', delimiter=',')
@@ -48,16 +49,17 @@ def plot(repeat):  ## load and plot data
     plt.legend(loc='best')
     plt.savefig('./result/queue_plot.png')
     plt.show()
+    plt.clf()
 
     
-def run_syn(I,J,d,mu_inv,T,rho,n,gamma,V,repeat,util_arriv,load,env,ext=False,prep=False):    
+def run_syn(I,J,d,mu_inv,T,rho,n,gamma,V,repeat,util_arriv,load,env):    
     exp_reward=np.zeros((repeat,T))
     exp_oracle_reward=np.zeros(repeat)
     queue_length=np.zeros((repeat,T))
     if load==False:
         for ind in range(repeat):
             print('repeat_ind:',ind+1)
-            Env=Environment(I,J,d,mu_inv,T,rho,n,ind)  #generate environment
+            Env=SynWorld(I,J,d,mu_inv,T,rho,n,ind)  #generate environment
             algorithm=Algorithm(gamma,V,T,Env,util_arriv) #scheduling algorithm
             oracle=Oracle(Env) #oracle algorithm
             algorithm.run()
@@ -68,7 +70,8 @@ def run_syn(I,J,d,mu_inv,T,rho,n,gamma,V,repeat,util_arriv,load,env,ext=False,pr
         save(exp_reward,exp_oracle_reward,queue_length,T)
     plot(repeat)
     
-def run_real(I,J,d,T,gamma,V,repeat,load,env,ext=False,prep=False):
+def run_real(I,J,d,T,gamma,repeat,load,env,ext=False,prep=False):
+    
     exp_reward=np.zeros((repeat,T))
     exp_oracle_reward=np.zeros(repeat)
     queue_length=np.zeros((repeat,T))
@@ -78,7 +81,7 @@ def run_real(I,J,d,T,gamma,V,repeat,load,env,ext=False,prep=False):
             Preprocess.extraction()
         if prep==True:
             Preprocess.preprocess()
-
+        V=setting_real(T,I,J)
         for ind in range(repeat):
             print('repeat_ind:',ind+1)
             Env=RealWorld(I,J,d,T,ind)   #generate environment
@@ -137,7 +140,7 @@ if __name__ == "__main__":
         load=False #True: load saved data without running the algorithm
         repeat=10  #repeat number
         rho,n,V=setting_syn(I,J,n_tot,rho_tot,util_arriv)
-        run_syn(I,J,d,mu_inv,T,rho,n,gamma,V,repeat,util_arriv,load,env,ext,prep)
+        run_syn(I,J,d,mu_inv,T,rho,n,gamma,V,repeat,util_arriv,load,env)
     
     elif opt=='real': #exp with real data
         env='RealWorld'
@@ -150,7 +153,6 @@ if __name__ == "__main__":
         prep=False #True: preprocess real data
         repeat=5
         load=False
-        V=setting_real(T,I,J)
-        run_real(I,J,d,T,gamma,V,repeat,load,env,ext,prep)
+        run_real(I,J,d,T,gamma,repeat,load,env,ext,prep)
     else:
         print('wrong input')

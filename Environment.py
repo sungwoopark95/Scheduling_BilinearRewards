@@ -8,7 +8,7 @@ from scipy.stats import bernoulli
 
 
 
-class  Synworld:
+class  SynWorld:
     def normalize(self,v):
         norm = np.linalg.norm(v)
         return v / norm
@@ -71,10 +71,10 @@ class RealWorld:
         self.I=I
         self.J=J
         self.d=d
+        self.sd=0.1
         machine=pd.read_csv("./data/pre_machine.csv") #load machine (server)
         instance=pd.read_csv("./data/pre_instance.csv") #load instance
         cpi=pd.read_csv("./data/pre_cpi.csv")
-        self.sd=np.load('./data/cpi_sd.npy')
         collection=pd.read_csv("./data/pre_collection.csv") #load collection (job)
         self.n=machine.groupby('cluster').size().reset_index(name='count')['count'].values     
         ##compute rho for each collection class
@@ -136,7 +136,7 @@ class RealWorld:
             t_prev=t_1   
     ## observe rewards
     def observe(self,i,j):
-        reward=np.random.normal(self.avg_reward[int(i),j],self.var_reward[int(i),j])
+        reward=np.random.normal(self.avg_reward[int(i),j],np.sqrt(self.var_reward[int(i),j]))
         return reward
     ## mean rewards for regret bound
     def mean_reward(self,i,j):
