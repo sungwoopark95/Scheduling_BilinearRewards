@@ -23,7 +23,7 @@ class Preprocess:
         print('Extraction starts')
         time=5500000000
 
-#         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="google cloud key"   #put your own google cloud key.
+#         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="path"   #put a path of your own google cloud key.
         client = bigquery.Client()
         QUERY = (
              """
