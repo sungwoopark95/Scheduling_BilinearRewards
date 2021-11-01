@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 from google.cloud import bigquery
 from sklearn.cluster import KMeans 
-from sklearn.datasets import make_blobs
 
 
 class Preprocess:
