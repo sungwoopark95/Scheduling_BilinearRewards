@@ -1,8 +1,12 @@
+from google.cloud import bigquery
+from sklearn.cluster import KMeans 
 import os
 import numpy as np
 import pandas as pd
-from google.cloud import bigquery
-from sklearn.cluster import KMeans 
+import seaborn as sns
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
 
 
 class Preprocess:
@@ -10,14 +14,13 @@ class Preprocess:
         print('Extraction starts')
         time=5500000000
 
-#         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="path"   #put a path of your own google cloud key.
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./rising-timing-327605-5d1392df9030.json"
         client = bigquery.Client()
         QUERY = (
              """
         select time, machine_id, capacity.cpus, capacity.memory 
         from `google.com:google-cluster-data`.clusterdata_2019_a.machine_events
         where time=0
-        order by time asc
         """)
 
         df_machine = client.query(QUERY).to_dataframe()
@@ -27,15 +30,17 @@ class Preprocess:
         select  *
         from `google.com:google-cluster-data`.clusterdata_2019_a.collection_events
         where (time between 1 and {}) and type=1
+        order by time asc
         """).format(time)
 
         df_collection = client.query(QUERY).to_dataframe()
         id_list=tuple(df_collection['collection_id'])
 
         QUERY = """
-        select  time,collection_id, resource_request.cpus as cpus, resource_request.memory as memory
+        select  time, collection_id, resource_request.cpus as cpus, resource_request.memory as memory
         from `google.com:google-cluster-data`.clusterdata_2019_a.instance_events
         where (time between 1 and {}) and collection_id in {}
+        order by time asc
         """.format(time,id_list)
 
         df_instance = client.query(QUERY).to_dataframe()
@@ -61,7 +66,7 @@ class Preprocess:
 
         machine_num=12
         collection_num=5
-        seed=1
+        seed=26
         df_machine=pd.read_csv("./data/machine.csv")
         df_instance=pd.read_csv("./data/instance.csv")
         df_cpi=pd.read_csv("./data/cpi.csv")
@@ -90,7 +95,7 @@ class Preprocess:
 
         test_x=df_collection_cluster['avg_cpus']
         test_y=df_collection_cluster['avg_memory']   
-
+        
         kmeans = KMeans(n_clusters=collection_num,random_state=seed)
         points = pd.DataFrame(test_x.values, test_y.values).reset_index(drop=False)
         points.columns = ["x", "y"]
@@ -133,9 +138,54 @@ class Preprocess:
         df_cpi_stat=df_cpi.groupby(['collection_cluster','machine_cluster'])['1/CPI'].mean().reset_index(name='1/cpi_mean')
         df_cpi_stat['1/cpi_variance']=df_cpi.groupby(['collection_cluster','machine_cluster'])['1/CPI'].var().reset_index(name='1/cpi_variance')['1/cpi_variance']
 
-
+        ##save preprocessed data
         df_instance.to_csv('./data/pre_instance.csv',mode='w')
         df_cpi_stat.to_csv('./data/pre_cpi.csv', mode='w')
         df_machine.to_csv('./data/pre_machine.csv',mode='w')
         df_collection.to_csv('./data/pre_collection.csv',mode='w')
+        
+        ##plots for data analysis
+        
+        test_x=df_machine['cpus']
+        test_y=df_machine['memory']  
+        #Generate a list of unique points
+        points=list(set(zip(test_x,test_y))) 
+        #Generate a list of point counts
+        count=[len([x for x,y in zip(test_x,test_y) if x==p[0] and y==p[1]]) for p in points]
+        #Now for the plotting:
+        plot_x=[i[0] for i in points]
+        plot_y=[i[1] for i in points]
+        count=np.array(count)
+        cmap = mpl.cm.Reds(np.linspace(0,1,100))
+        cmap = mpl.colors.ListedColormap(cmap[10:,:-1])
+        plt.scatter(plot_x,plot_y,c=count,cmap=cmap)
+        plt.xlabel('CPU capacity')
+        plt.ylabel('Memory capacity')
+        plt.colorbar()
+        plt.savefig('./result/machine_cluster.png')
+        plt.show()
+        plt.clf()
+        
+        sns.scatterplot(x="x", y="y", hue="cluster", data=result_by_sklearn, palette="Set2")
+        plt.xlabel('CPU request size')
+        plt.ylabel('Memory request size')
+        plt.savefig('./result/collection_cluster.png')
+        plt.clf()
+
+        plt.hist(df_collection['time']*10**(-6),alpha=0.5,bins=100)
+        plt.xlabel('Arrival time (sec)')
+        plt.ylabel('Number of collections')
+        plt.savefig('./result/Arrival.png')
+        plt.clf()
+        
+        df=df_instance.groupby(by=[df_instance['collection_id']]).size().to_frame('size').reset_index()['size']
+        sns.ecdfplot(data=df, complementary=True)
+        plt.loglog(base=10)
+        plt.xlabel('Number of instances')
+        plt.ylabel('Complementary CDF')
+        plt.savefig('./result/CCDF.png')
+        plt.clf()
         print('Preprocess done')
+        
+        
+        

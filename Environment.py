@@ -27,7 +27,7 @@ class  SynWorld:
         self.sd=0.1  
         self.min_value=0  #min value of reward
 
-        np.random.seed(repeat+1)
+#         np.random.seed(repeat+1)
         ##generate theta
         self.theta=np.random.uniform(low=self.min_value, high=1, size=self.d*self.d)
         self.theta=self.normalize(self.theta)
@@ -87,7 +87,7 @@ class RealWorld:
         self.y=np.zeros((self.J,self.d))
         self.theta=np.zeros(self.d*self.d)
         self.min_value=0
-        np.random.seed(repeat+1)
+#         np.random.seed(repeat+1)
 
         ##reward distribution information
         self.avg_reward=np.zeros((self.I,self.J))
