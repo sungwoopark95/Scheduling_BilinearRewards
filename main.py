@@ -46,7 +46,7 @@ def plot(repeat,com):  ## load and plot data
         plt.legend(loc='best')
         plt.savefig('./result/queue_plot.png')
         plt.clf()
-        
+    
     elif com==True:
         regret1=np.loadtxt('./result/reward_mean_alg1.csv', delimiter=',')
         sd1=np.loadtxt('./result/reward_sd_alg1.csv', delimiter=',')
@@ -95,6 +95,8 @@ def run_syn(I,J,d,mu_inv,T,rho,n,gamma,V,repeat,util_arriv,load,env,com):
             algorithm1.run()
             oracle.run()
             exp_oracle_reward[ind]=oracle.exp_oracle_reward
+            exp_reward1[ind,:]=algorithm1.exp_reward 
+            queue_length1[ind,:]=algorithm1.count_his
             if com==True:
                 np.random.seed(ind+1)
                 Env=SynWorld(I,J,d,mu_inv,T,rho,n,ind)  
@@ -102,8 +104,7 @@ def run_syn(I,J,d,mu_inv,T,rho,n,gamma,V,repeat,util_arriv,load,env,com):
                 algorithm2.run()
                 exp_reward2[ind,:]=algorithm2.exp_reward 
                 queue_length2[ind,:]=algorithm2.count_his
-            exp_reward1[ind,:]=algorithm1.exp_reward 
-            queue_length1[ind,:]=algorithm1.count_his
+
         save(exp_reward1,exp_oracle_reward,queue_length1,T,'alg1')
         if com==True:
             save(exp_reward2,exp_oracle_reward,queue_length2,T,'alg2')
@@ -185,16 +186,16 @@ if __name__ == "__main__":
         env='SynWorld'
         I=10 # number of job classes
         J=2  # number of servers
-        T=500 # time horizon
+        T=100 # time horizon
         d=2 # dimension for context vectors
         mu_inv=1 # mean job processing time
         rho_tot=1  #total arrival rate for processing time
         n_tot=8  #total departure rate for processing time
         gamma=1.2 # gamma>1
+        repeat=10  #repeat number
         util_arriv=False #True: utilize traffic intensities for Algorithm 1
         load=False #True: load saved data without running the algorithm
-        repeat=10  #repeat number
-        com=True #True: compare with other algorithm
+        com=False #True: compare with other algorithm
         fix=False #True: alternative setting with fixed job arrival rates and server capacities 
         rho,n,V=setting_syn(I,J,n_tot,rho_tot,util_arriv,fix)
         run_syn(I,J,d,mu_inv,T,rho,n,gamma,V,repeat,util_arriv,load,env,com)
@@ -206,11 +207,11 @@ if __name__ == "__main__":
         d=4
         T=1100
         gamma=1.2
-        ext=False #True: extract real data
-        prep=True #True: preprocess real data
         repeat=10
+        ext=False #True: extract real data
+        prep=False #True: preprocess real data
         load=False
-        com=True
+        com=False
         run_real(I,J,d,T,gamma,repeat,load,env,ext,prep,com)
     else:
         print('wrong input')

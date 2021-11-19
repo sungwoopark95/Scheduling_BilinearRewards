@@ -163,9 +163,7 @@ class Preprocess:
         plt.ylabel('Memory capacity')
         plt.colorbar()
         plt.savefig('./result/machine_cluster.png')
-        plt.show()
         plt.clf()
-        
         sns.scatterplot(x="x", y="y", hue="cluster", data=result_by_sklearn, palette="Set2")
         plt.xlabel('CPU request size')
         plt.ylabel('Memory request size')

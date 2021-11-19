@@ -13,6 +13,7 @@ class  SynWorld:
         norm = np.linalg.norm(v)
         return v / norm
     def __init__(self,I,J,d,mu_inv,T,rho,n,repeat):
+        self.type='syn'
         self.T=T
         self.mu_inv=mu_inv
         self.I=I  # number of job classes
@@ -67,6 +68,7 @@ class RealWorld:
         norm = np.linalg.norm(v)
         return v / norm
     def __init__(self,I,J,d,T,repeat):
+        self.type='real'
         self.T=T
         self.I=I
         self.J=J

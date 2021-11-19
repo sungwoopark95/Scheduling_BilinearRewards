@@ -33,14 +33,17 @@ class Algorithm1:
         self.gamma=gamma
         self.bool_=util_arriv #True for utilizing arriv rates
         self.min_value=0 #reward min value
-
+        if self.Env.type=='syn':
+            self.zeta=np.sum(self.n)
+        elif self.Env.type=='real':
+            self.zeta=1
     
     def OFUL(self,i,j,A_inv,b,t):
         ##Compute reward estimators
         z=np.outer(self.x[int(i)], self.y[j]).flatten()
         theta_hat=A_inv@b
         dim = self.d*self.d
-        beta = self.sd*math.sqrt(dim*math.log((1+self.n.sum()*t)*self.T))+1
+        beta = self.sd*math.sqrt(dim*math.log((1+t)*self.T))+self.zeta**(1/2)
         p=z@theta_hat+np.sqrt(z@A_inv@z)*beta
 
         return p
@@ -108,7 +111,7 @@ class Algorithm1:
     def run(self):
         ## running suggested Algorithm 1.
         
-        A=np.identity(self.d*self.d)
+        A=self.zeta*np.identity(self.d*self.d)
         A_inv=np.linalg.inv(A)
         self.exp_reward=np.zeros(self.T)
         self.count_his=np.zeros(self.T)       
@@ -166,12 +169,11 @@ class Algorithm1:
                         ind=self.inform[i][2]
                         remain_num=self.cl[arriv_time][ind][1]                        
                         class_=self.inform[i][1]
-                        if remain_num>0:
-                            z=np.outer(self.x[int(class_)], self.y[j]).flatten()
-                            reward=self.Env.observe(int(class_),j) #get rewards
-                            z_his.append(z)
-                            reward_his.append(reward)
-                            self.cl[arriv_time][ind][1]=self.cl[arriv_time][ind][1]-1
+                        z=np.outer(self.x[int(class_)], self.y[j]).flatten()
+                        reward=self.Env.observe(int(class_),j) #get rewards
+                        z_his.append(z)
+                        reward_his.append(reward)
+                        self.cl[arriv_time][ind][1]=self.cl[arriv_time][ind][1]-1
                             
             ## update parameters       
             G=A_inv
@@ -334,9 +336,8 @@ class Algorithm2: #for comparison
                         ind=self.inform[i][2]
                         remain_num=self.cl[arriv_time][ind][1]                        
                         class_=self.inform[i][1]
-                        if remain_num>0:
-                            temp=self.his[arriv_time,ind,j,1].copy()
-                            self.his[arriv_time,ind,j,1]=self.his[arriv_time,ind,j,1]+1
-                            reward=self.Env.observe(int(class_),j) #get rewards
-                            self.his[arriv_time,ind,j,0]=(self.his[arriv_time,ind,j,0]*temp+reward)/self.his[arriv_time,ind,j,1]   
-                            self.cl[arriv_time][ind][1]=self.cl[arriv_time][ind][1]-1
+                        temp=self.his[arriv_time,ind,j,1].copy()
+                        self.his[arriv_time,ind,j,1]=self.his[arriv_time,ind,j,1]+1
+                        reward=self.Env.observe(int(class_),j) #get rewards
+                        self.his[arriv_time,ind,j,0]=(self.his[arriv_time,ind,j,0]*temp+reward)/self.his[arriv_time,ind,j,1]   
+                        self.cl[arriv_time][ind][1]=self.cl[arriv_time][ind][1]-1
