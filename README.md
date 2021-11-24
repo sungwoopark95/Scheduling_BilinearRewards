@@ -27,8 +27,8 @@
 ## How to run this code
 Please run this command:
 
- * Synthetic data\
+ * For synthetic data\
  python3 main.py syn
 
- * Real data\
+ * For real data\
  python3 main.py real
