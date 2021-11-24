@@ -21,7 +21,6 @@
   load=False #True: load saved data without running the algorithm\
   com=True #True: compare with other algorithm\
   fix=False #True: alternative setting with fixed job arrival rates and server capacities \
-  
   For getting the results in Figure 7, set variables for real data in the main function as follows
   I=5\
   J=12\
