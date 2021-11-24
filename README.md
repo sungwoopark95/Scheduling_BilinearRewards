@@ -9,7 +9,7 @@
     This file includes the main function.
     * For getting the results in Figure 1, please set variables for synthetic data in the main function as follows:\
    I=10/J=2/T=700/d=2/mu_inv=1/rho_tot=1/n_tot=8/gamma=1.2/repeat=10/util_arriv=False/load=False/com=True/fix=False 
-    * For getting the results in Figure 7, please set variables for real data in the main function as follows\
+    * For getting the results in Figure 7, please set variables for real data in the main function as follows:\
    I=5/J=12/d=4/T=1100/gamma=1.2/repeat=10/ext=False/prep=False/load=False/com=True
 
   * Preprocess.py\
