@@ -17,20 +17,20 @@
    n_tot=8  \
    gamma=1.2\
    repeat=10 \ 
-   util_arriv=False\ 
+   util_arriv=False \ 
    load=False \
-   com=True\
+   com=True \
    fix=False 
     * For getting the results in Figure 7, please set variables for real data in the main function as follows\
    I=5\
    J=12\
    d=4\
    T=1100\
-   gamma=1.2\
-   repeat=10\
+   gamma=1.2 \
+   repeat=10 \
    ext=False  \
    prep=False \
-   load=False\
+   load=False \
    com=True
 
   * Preprocess.py\
