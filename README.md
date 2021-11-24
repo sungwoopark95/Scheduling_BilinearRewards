@@ -8,19 +8,19 @@
   * main.py\
     This file includes the main function.
     * For getting the results in Figure 1, please set variables for synthetic data in the main function as follows:\
-   I=10 # number of job classes\
-   J=2  # number of servers\
-   T=700 # time horizon\
-   d=2 # dimension for context vectors\
-   mu_inv=1 # mean job processing time\
-   rho_tot=1  #total arrival rate for processing time\
-   n_tot=8  #total departure rate for processing time\
-   gamma=1.2 # gamma>1\
-   repeat=10  #repeat number\
-   util_arriv=False #True: utilize traffic intensities for Algorithm 1\
-   load=False #True: load saved data without running the algorithm\
-   com=True #True: compare with other algorithm\
-   fix=False #True: alternative setting with fixed job arrival rates and server capacities 
+   I=10 \
+   J=2 \
+   T=700 \
+   d=2 \
+   mu_inv=1 \
+   rho_tot=1 \
+   n_tot=8  \
+   gamma=1.2\
+   repeat=10 \ 
+   util_arriv=False\ 
+   load=False \
+   com=True\
+   fix=False 
     * For getting the results in Figure 7, please set variables for real data in the main function as follows\
    I=5\
    J=12\
@@ -28,8 +28,8 @@
    T=1100\
    gamma=1.2\
    repeat=10\
-   ext=False #True: extract real data\
-   prep=False #True: preprocess real data\
+   ext=False  \
+   prep=False \
    load=False\
    com=True
 
