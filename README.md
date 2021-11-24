@@ -7,6 +7,7 @@
 ## Structure
   * main.py\
   This file includes the main function. \
+  
   For getting the results in Figure 1, set variables for synthetic data in the main function as follows:\
   I=10 # number of job classes\
   J=2  # number of servers\
