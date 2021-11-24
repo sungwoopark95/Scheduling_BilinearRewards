@@ -15,7 +15,7 @@
    mu_inv=1 \
    rho_tot=1 \
    n_tot=8  \
-   gamma=1.2\
+   gamma=1.2 \
    repeat=10 \ 
    util_arriv=False \ 
    load=False \
