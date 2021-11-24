@@ -31,7 +31,7 @@
    ext=False #True: extract real data\
    prep=False #True: preprocess real data\
    load=False\
-   com=True\
+   com=True
 
   * Preprocess.py\
   This file includes the code for extracting and preprocessing real data. It is required to put your own google cloud key in this file to extract the public dataset. Otherwise, you can use the dataset in the 'data' file by deactivating extraction in main.py (ext=False).
