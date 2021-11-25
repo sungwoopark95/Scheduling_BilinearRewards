@@ -8,9 +8,9 @@
   * main.py\
     This file includes the main function.
     * For getting the results in Figure 1, please set variables for synthetic data in the main function as follows:\
-   I=10/J=2/T=700/d=2/mu_inv=1/rho_tot=1/n_tot=8/gamma=1.2/repeat=10/util_arriv=False/load=False/com=True/fix=False 
+   I=10, J=2, T=700, d=2, mu_inv=1, rho_tot=1, n_tot=8, gamma=1.2, repeat=10, util_arriv=False, load=False, com=True, fix=False. 
     * For getting the results in Figure 7, please set variables for real data in the main function as follows:\
-   I=5/J=12/d=4/T=1100/gamma=1.2/repeat=10/ext=False/prep=False/load=False/com=True
+   I=5, J=12, d=4, T=1100, gamma=1.2, repeat=10, ext=False, prep=False, load=False, com=True.
 
   * Preprocess.py\
   This file includes the code for extracting and preprocessing real data. It is required to put your own google cloud key in this file to extract the public dataset described in https://github.com/google/cluster-data. Otherwise, you can use the dataset in the 'data' file extracted from the public dataset by deactivating extraction in main.py (i.e. ext=False). 
