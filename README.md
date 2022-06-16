@@ -28,11 +28,11 @@
 Please run this command:
 
 Figure 3: 
-'''python3 main.py 1 run'''
+```python3 main.py 1 run```
 Figure 4: 
-'''python3 main.py 2 run'''
+```python3 main.py 2 run```
 Figure 5: 
-'''python3 main.py 3 run'''
+```python3 main.py 3 run```
 Figure 6: 
-'''python3 main.py 4 run'''
+```python3 main.py 4 run```
 
