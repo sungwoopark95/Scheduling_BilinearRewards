@@ -33,11 +33,7 @@ class Algorithm1:
         self.gamma=gamma
         self.min_value=0 #reward min value
         self.w=w
-        if self.Env.type=='syn':
-            self.zeta=1
-            # self.zeta=np.sum(self.n)
-        elif self.Env.type=='real':
-            self.zeta=1
+        self.zeta=1
     
     def OFUL(self,i,j,A_inv,b,t):
         ##Compute reward estimators
