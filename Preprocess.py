@@ -14,7 +14,7 @@ class Preprocess:
         print('Extraction starts')
         time=5500000000
 
-#         os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=""
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./rising-timing-327605-5d1392df9030.json"
         client = bigquery.Client()
         QUERY = (
              """
@@ -61,12 +61,13 @@ class Preprocess:
         df_collection.to_csv('./data/collection.csv')
         print('Extraction done')
 
-    def preprocess():
+    def preprocess(K,seed):
         print('Preprocess starts')
 
         machine_num=12
-        collection_num=5
-        seed=26
+        collection_num=K
+#         seed=26
+#         seed=0
         df_machine=pd.read_csv("./data/machine.csv")
         df_instance=pd.read_csv("./data/instance.csv")
         df_cpi=pd.read_csv("./data/cpi.csv")
@@ -139,10 +140,11 @@ class Preprocess:
         df_cpi_stat['1/cpi_variance']=df_cpi.groupby(['collection_cluster','machine_cluster'])['1/CPI'].var().reset_index(name='1/cpi_variance')['1/cpi_variance']
 
         ##save preprocessed data
-        df_instance.to_csv('./data/pre_instance.csv',mode='w')
-        df_cpi_stat.to_csv('./data/pre_cpi.csv', mode='w')
-        df_machine.to_csv('./data/pre_machine.csv',mode='w')
-        df_collection.to_csv('./data/pre_collection.csv',mode='w')
+        name='seed'+str(seed)+'_K'+str(K)
+        df_instance.to_csv('./data/pre_instance_'+name+'.csv',mode='w')
+        df_cpi_stat.to_csv('./data/pre_cpi_'+name+'.csv', mode='w')
+        df_machine.to_csv('./data/pre_machine_'+name+'.csv',mode='w')
+        df_collection.to_csv('./data/pre_collection_'+name+'.csv',mode='w')
         
         ##plots for data analysis
         
@@ -155,33 +157,52 @@ class Preprocess:
         #Now for the plotting:
         plot_x=[i[0] for i in points]
         plot_y=[i[1] for i in points]
+        plt.rc('legend',fontsize=18)
+        plt.rcParams.update({'font.size': 15})
+
         count=np.array(count)
         cmap = mpl.cm.Reds(np.linspace(0,1,100))
         cmap = mpl.colors.ListedColormap(cmap[10:,:-1])
         plt.scatter(plot_x,plot_y,c=count,cmap=cmap)
-        plt.xlabel('CPU capacity')
-        plt.ylabel('Memory capacity')
+        plt.xlabel('CPU capacity',fontsize=18)
+        plt.ylabel('Memory capacity',fontsize=18)
+        plt.tight_layout()
+
         plt.colorbar()
-        plt.savefig('./result/machine_cluster.png')
+        plt.savefig('./result/machine_cluster.png',dpi=300)
+        plt.show()
         plt.clf()
+        
+        plt.rc('legend',fontsize=18)
+        plt.rcParams.update({'font.size': 15})
         sns.scatterplot(x="x", y="y", hue="cluster", data=result_by_sklearn, palette="Set2")
-        plt.xlabel('CPU request size')
-        plt.ylabel('Memory request size')
+        plt.xlabel('CPU request size',fontsize=18)
+        plt.ylabel('Memory request size',fontsize=18)
+        plt.tight_layout()
+
         plt.savefig('./result/collection_cluster.png')
         plt.clf()
 
+        plt.rc('legend',fontsize=18)
+        plt.rcParams.update({'font.size': 15})
+
         plt.hist(df_collection['time']*10**(-6),alpha=0.5,bins=100)
-        plt.xlabel('Arrival time (sec)')
-        plt.ylabel('Number of collections')
-        plt.savefig('./result/Arrival.png')
+        plt.xlabel('Arrival time (sec)',fontsize=18)
+        plt.ylabel('Number of collections',fontsize=18)
+        plt.tight_layout()
+        plt.savefig('./result/Arrival.png',dpi=300)
         plt.clf()
         
+        plt.rc('legend',fontsize=18)
+        plt.rcParams.update({'font.size': 15})       
         df=df_instance.groupby(by=[df_instance['collection_id']]).size().to_frame('size').reset_index()['size']
         sns.ecdfplot(data=df, complementary=True)
         plt.loglog(base=10)
-        plt.xlabel('Number of instances')
-        plt.ylabel('Complementary CDF')
-        plt.savefig('./result/CCDF.png')
+        plt.xlabel('Number of instances',fontsize=18)
+        plt.ylabel('Complementary CDF',fontsize=18)
+        plt.tight_layout()
+
+        plt.savefig('./result/CCDF.png',dpi=300)
         plt.clf()
         print('Preprocess done')
         

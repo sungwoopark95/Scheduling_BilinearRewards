@@ -50,7 +50,6 @@ class  SynWorld:
                 self.cl[t]=[[l,n]]
             else:
                 self.cl[t]=[[l,0]]
-     
     ## observe rewards
     def observe(self,i,j):
         z=np.outer(self.x[i], self.y[j]).flatten()
@@ -67,23 +66,24 @@ class RealWorld:
     def normalize(self,v):
         norm = np.linalg.norm(v)
         return v / norm
-    def __init__(self,I,J,d,T,repeat):
+    def __init__(self,I,J,d,T,repeat,K,seed):
         self.type='real'
         self.T=T
         self.I=I
         self.J=J
         self.d=d
         self.sd=0.1
-        machine=pd.read_csv("./data/pre_machine.csv") #load machine (server)
-        instance=pd.read_csv("./data/pre_instance.csv") #load instance
-        cpi=pd.read_csv("./data/pre_cpi.csv")
-        collection=pd.read_csv("./data/pre_collection.csv") #load collection (job)
+        name='seed'+str(seed)+'_K'+str(K)
+        machine=pd.read_csv("./data/pre_machine_"+name+".csv") #load machine (server)
+        instance=pd.read_csv("./data/pre_instance_"+name+".csv") #load instance
+        cpi=pd.read_csv("./data/pre_cpi_"+name+".csv")
+        collection=pd.read_csv("./data/pre_collection_"+name+".csv") #load collection (job)
         self.n=machine.groupby('cluster').size().reset_index(name='count')['count'].values     
         ##compute rho for each collection class
         lamb=collection.groupby('cluster').size().values/self.T
         mu_inv=collection['N'].median()
         self.rho=lamb*mu_inv
-        
+#         self.rho_est=np.zeros((self.T,self.I))+0.001
         self.cl=dict()
         self.x=np.zeros((self.I,self.d))
         self.y=np.zeros((self.J,self.d))
@@ -119,6 +119,18 @@ class RealWorld:
             self.y[j,2]=1/self.y[j,0]
             self.y[j,3]=1/self.y[j,1]
         
+        ## estimate rho
+#         for t in range(self.T):
+#             t_1=t*(10**6)*5
+#             df_temp=collection.loc[(collection['time']<t_1)]
+#             arriv_num=df_temp.shape[0]
+#             clus_list= df_temp['cluster'].values-1
+#             for i in range(I):
+#                 if np.count_nonzero(clus_list == i)==0:
+#                     self.rho_est[t,i]=0.001
+#                 else:
+#                     self.rho_est[t,i]=np.count_nonzero(clus_list == i)/mu_inv
+                
         ## arrival jobs
         t_prev=0
         for t in range(self.T):
