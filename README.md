@@ -27,8 +27,12 @@
 ## How to run this code
 Please run this command:
 
- * For synthetic data:\
- python3 main.py syn
+Figure 3: 
+'''python3 main.py 1 run'''
+Figure 4: 
+'''python3 main.py 2 run'''
+Figure 5: 
+'''python3 main.py 3 run'''
+Figure 6: 
+'''python3 main.py 4 run'''
 
- * For real data:\
- python3 main.py real
