@@ -18,6 +18,7 @@ class MedicalWorld:
         self.Bs = np.zeros((self.I, self.J)) # The number of type i jobs served by server j in time t
         self.values = np.zeros((self.I, self.J)) # containing r_{ij}
     
-    def simulate():
+    def simulate(self):
         ## Simulate arrival of patients
+
         return None
