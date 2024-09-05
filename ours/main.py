@@ -96,12 +96,25 @@ if __name__ == "__main__":
                 to_assign = np.random.choice(J, replace=True, p=p[i, :])
                 Gamma[i][to_assign] += 1
                 queue[to_assign].append(i)
+                Q[i][to_assign] += 1 ## 9/3 add
         
-        # update B and Q
-        for i in range(I):
-            for j in range(J):
-                B[i][j] = np.minimum(Q[i][j] + Gamma[i][j], 1)
-                Q[i][j] = np.minimum(Q[i][j] + Gamma[i][j] - 1, 0)
+        # # update B and Q
+        # for i in range(I):
+        #     for j in range(J):
+        #         B[i][j] = np.minimum(Q[i][j] + Gamma[i][j], 1)
+        #         Q[i][j] = np.minimum(Q[i][j] + Gamma[i][j] - 1, 0)
+
+
+        ## add 9/3
+        B = np.zeros((I, J))
+        for j in range(J):
+            for i in range(I):
+                if len(queue[j]) == 0:
+                    continue
+                elif queue[j][0] == i:
+                    B[i][j] = 1
+                    Q[i][j] = max(Q[i][j] - 1, 0) ## or Q[i][j] -= 1
+
 
         ## 5. Step 3 Part 2
         for j in range(J):
@@ -118,6 +131,7 @@ if __name__ == "__main__":
                 H[i_star][j] += 1               # h_ij(t)
                 r_bar_prev = R_bar[i_star][j]   # r_bar(t-1)
                 R_bar[i_star][j] = (h_prev * r_bar_prev + X_ij) / H[i_star][j]
+                queue[j].pop(0) ## add 9/3
     print("Done!")
 
     # Create the heatmap
