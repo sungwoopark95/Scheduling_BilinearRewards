@@ -1,3 +1,7 @@
+"""
+Algorithm 2: Queue-Based Algorithm
+
+"""
 import numpy as np
 from scipy.optimize import minimize
 from tqdm import tqdm
@@ -16,107 +20,80 @@ def sample_lambdas(high:int, size:int, epsilon:float=0.1) -> np.ndarray[float]:
     lambdas = lambdas * size 
     return lambdas
 
-def optimize(V:float, I:int, J:int, lbdas:np.ndarray, R:np.ndarray):
-    ## Objective function to be maximized (negating for minimization)
-    def objective(p:np.ndarray):
-        p = np.reshape(p, (I, J))
-        term1 = np.log(1 - np.sum(lbdas[:, None] * p, axis=0))
-        term2 = np.sum(lbdas[:, None] * p * R, axis=0)
-        return -np.sum((1/V) * term1 + term2)
-    
-    ## Constraints
-    def constraint_sum(p):
-        p = np.reshape(p, (I, J))
-        return np.sum(p, axis=1) - 1
-    
-    # Bounds for each p_ij(t)
-    bounds = [(0, None) for _ in range(I * J)]
-
-    # Initial guess for p_ij(t)
-    p0 = np.zeros((I, J)).flatten()
-
-    # Define the constraints in the form required by 'minimize'
-    constraints = [{'type': 'eq', 'fun': constraint_sum}]
-
-    # Perform the optimization
-    result = minimize(objective, p0, bounds=bounds, constraints=constraints)
-
-    # Reshape the result to match p_ij(t)
-    p_optimized = np.reshape(result.x, (I, J))
-
-    return p_optimized
-
 
 if __name__ == "__main__":
     ## set the seed
-    SEED = 777
+    SEED = 145
     np.random.seed(SEED)
 
     ## Initialize necessary values
-    V = 1       # Placeholder value
-    I = 20     # total number of jobs (patients)
-    J = 10      # total number of servers (hospitals)
-    lbdas = sample_lambdas(I, J)
-    T = 100    # total horizon
+    V = 1000       # Placeholder value
+    I = 2     # total number of jobs (patients)
+    J = 6      # total number of servers (hospitals)
+    # lbdas = sample_lambdas(I, J)
+    lbdas = np.array([2, 3])
+    T = 1000    # total horizon
     true_mean_reward = np.random.uniform(low=0, high=1, size=J)
-    min_reward = np.amin(true_mean_reward)
+    min_reward = 0.1
+    epsilon = 1 / np.sqrt(T)
+    initial_reward = 0.5
 
     ## Initialize matrices
     Gamma = np.zeros((I, J))            # Gamma[i][j]: the number of patients of type i arrived at the hospital j
-    Q = np.zeros((I, J))                # Q[i][j]: the number of waiting patients of type i in the hospital j
-    B = np.zeros((I, J))                # B[i][j]: the number of treated patients of type i in the hospital j
-    H = np.zeros((I, J))                # H_{ij}(t) = \sum_{\tau=1}^t B_{ij}(\tau)
+    wait = np.zeros((I, J))             # wait[i][j]: the number of waiting patients of type i in the hospital j
+    treat = np.zeros((I, J))            # treat[i][j]: the number of treated patients of type i in the hospital j
+    H = np.zeros((I, J))                # H_{ij}(t) = \sum_{\tau=1}^t treat_{ij}(\tau)
     # R = np.zeros((I, J))              # matrix for the rewards
     R_bar = np.zeros((I, J))            # matrix for the average rewards
     queue = {j: [] for j in range(J)}   # queue for each hospital; contain the type of waiting patients
     
     ## run simulator
     ## 1. for each time
-    for t in tqdm(range(T)):
+    for t in range(1,T+1):
         ## 2. implement the Step 1
         R = np.zeros((I, J))    # matrix containing r_{ij}(t)
         for i in range(I):
             for j in range(J):
                 if H[i][j] == 0:
-                    R[i][j] = 1
+                    R[i][j] = initial_reward
                 else:
-                    min_inside = R_bar[i][j] + np.sqrt((2 * np.log(t)) / H[i][j])
+                    min_inside = R_bar[i][j] + np.sqrt((np.log(t-1)) / H[i][j])
                     minimum = np.minimum(min_inside, 1)
-                    R[i][j] = np.maximum(minimum, min_reward)        
+                    R[i][j] = np.maximum(minimum, min_reward)
+                    print(f"time = {t}\tH_ij = {H[i][j]}\tr_ij = {R[i][j]}\trbar_ij = {R_bar[i][j]}")
         
-        ## 3. implement the Step 2
-        p = optimize(V=V, I=I, J=J, lbdas=lbdas, R=R)
-        # print(p, np.sum(p, axis=1))
-
-        ## 4. Step 3 Part 1 - with returned r_{ij}(t) and p_{ij}(t) implement update
+        ## 3. Step 3 Part 1 - with returned r_{ij}(t) and p_{ij}(t) implement update
         arrivals = np.random.poisson(lam=lbdas)
         for i in range(I):
             arrival_num = arrivals[i]
             for _ in range(arrival_num):
-                to_assign = np.random.choice(J, replace=True, p=p[i, :])
+                to_assign = np.argmax(R[i] - epsilon * wait[i]) ## np.argmax returns the first index of the maximum value
                 Gamma[i][to_assign] += 1
                 queue[to_assign].append(i)
-                Q[i][to_assign] += 1 ## 9/3 add
+                wait[i][to_assign] += 1 ## 9/3 add
         
-        # # update B and Q
+        # # update treat and wait
         # for i in range(I):
         #     for j in range(J):
-        #         B[i][j] = np.minimum(Q[i][j] + Gamma[i][j], 1)
-        #         Q[i][j] = np.minimum(Q[i][j] + Gamma[i][j] - 1, 0)
+        #         treat[i][j] = np.minimum(wait[i][j] + Gamma[i][j], 1)
+        #         wait[i][j] = np.minimum(wait[i][j] + Gamma[i][j] - 1, 0)
 
 
         ## add 9/3
-        B = np.zeros((I, J))
+        ## treatment starts 
+        ## update treat and wait
+        treat = np.zeros((I, J))
         for j in range(J):
             for i in range(I):
                 if len(queue[j]) == 0:
                     continue
                 elif queue[j][0] == i:
-                    B[i][j] = 1
-                    Q[i][j] = max(Q[i][j] - 1, 0) ## or Q[i][j] -= 1
+                    treat[i][j] = 1
+                    wait[i][j] = max(wait[i][j] - 1, 0) ## or wait[i][j] -= 1
 
 
-        ## 5. Step 3 Part 2
+        ## 4. Step 3 Part 2
+        ## update H, R_bar, and queue
         for j in range(J):
             # if the queue at server j is not empty
             if len(queue[j]) > 0:
@@ -135,13 +112,11 @@ if __name__ == "__main__":
     print("Done!")
 
     # Create the heatmap
-    sns.heatmap(p, annot=False, cmap='viridis')
-
-    # Add labels and title
-    plt.title(r"Heatmap of $p$")
+    sns.heatmap(H, annot=False, cmap='plasma')
+    plt.title(r"Heatmap of $H$")
     plt.xlabel('Server (Hospitals)')
     plt.ylabel('Jobs (Patients)')
-    filename = "./figures/p_no_annotation.pdf"
+    filename = f"./figures/H_no_annotation_seed_{SEED}_initial_reward_{initial_reward}_epsilon_{epsilon}.pdf"
     plt.savefig(filename)
 
     plt.show()
