@@ -69,7 +69,8 @@ if __name__ == "__main__":
     # lbdas = sample_lambdas(I, J)
     lbdas = np.array([2, 3])
     T = 1000    # total horizon
-    true_mean_reward = np.random.uniform(low=0, high=1, size=J)
+    true_mean_reward = np.random.uniform(low=0, high=1, size=(I,J))
+    print(true_mean_reward)
     min_reward = np.amin(true_mean_reward)
     print(f"min_reward: {min_reward}")
     initial_reward = 1
@@ -107,7 +108,7 @@ if __name__ == "__main__":
         
         ## 3. implement the Step 2
         p = optimize(V=V, I=I, J=J, lbdas=lbdas, R=R)
-        print(np.sum(p, axis=1))
+        # print(np.sum(p, axis=1))
 
         ## 4. Step 3 Part 1 - with returned r_{ij}(t) and p_{ij}(t) implement update
         arrivals = np.random.poisson(lam=lbdas)
@@ -146,7 +147,8 @@ if __name__ == "__main__":
                 # observe the type of the first job in the queue
                 i_star = queue[j][0]
                 # Use true mean reward instead of R
-                X_ij = np.random.binomial(n=1, p=true_mean_reward[j])  # Changed this line
+                # print(f"true_mean_reward: {true_mean_reward[i_star][j]}")
+                X_ij = np.random.binomial(n=1, p=true_mean_reward[i_star][j])  # Changed this line
                 
                 # Update
                 h_prev = H[i_star][j]           # h_ij(t-1)
