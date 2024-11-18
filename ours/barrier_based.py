@@ -71,6 +71,7 @@ if __name__ == "__main__":
     T = 1000    # total horizon
     true_mean_reward = np.random.uniform(low=0, high=1, size=J)
     min_reward = np.amin(true_mean_reward)
+    print(f"min_reward: {min_reward}")
     initial_reward = 1
 
     ## Initialize matrices
@@ -91,11 +92,12 @@ if __name__ == "__main__":
         R = np.zeros((I, J))    # matrix containing r_{ij}(t)
         R[:, :] = 0
         # print(f"min_reward: {min_reward}")
-        print(f"time:\t{t}, R_bar:\n", R_bar)
+        # print(f"time:\t{t}, R_bar:\n", R_bar)
         for i in range(I):
             for j in range(J):
                 if H[i][j] == 0:
                     R[i][j] = initial_reward ## 1->0 10/22 for test
+                    # print(f"initial_reward: {initial_reward}")
                 else:
                     uncertainty = np.sqrt((np.log(t-1)) / H[i][j])
                     min_inside = R_bar[i][j] + uncertainty
@@ -143,11 +145,9 @@ if __name__ == "__main__":
             if len(queue[j]) > 0:
                 # observe the type of the first job in the queue
                 i_star = queue[j][0]
-                # observe the realized reward
-                r_ij = R[i_star][j]
-                # print(f"time: {t}\tr_ij = {r_ij}")
-                X_ij = np.random.binomial(n=1, p=r_ij)
-
+                # Use true mean reward instead of R
+                X_ij = np.random.binomial(n=1, p=true_mean_reward[j])  # Changed this line
+                
                 # Update
                 h_prev = H[i_star][j]           # h_ij(t-1)
                 H[i_star][j] += 1               # h_ij(t)
